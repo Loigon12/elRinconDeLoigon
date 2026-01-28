@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>El Rincón de Loigon | Visual Storyteller</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+<link rel="icon" href="https://img.icons8.com/ios-filled/50/000000/slr-camera.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+
+    <style>
+        body { font-family: "Inter", sans-serif; }
+        h1, h2, h3, .serif { font-family: "Playfair Display", serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); }
+        /* Animación suave para las imágenes */
+        .img-zoom { transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        .group:hover .img-zoom { transform: scale(1.05); }
+        /* Barra de scroll personalizada para PC */
+    #collections-scroll::-webkit-scrollbar {
+        height: 6px; /* Altura de la barra horizontal */
+    }
+    
+    #collections-scroll::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+    
+    #collections-scroll::-webkit-scrollbar-thumb {
+        background: #27272a; /* Zinc-800 */
+        border-radius: 10px;
+        transition: background 0.3s;
+    }
+
+    #collections-scroll::-webkit-scrollbar-thumb:hover {
+        background: #000;
+    }
+
+    /* En móviles la ocultamos para mantener la limpieza táctil */
+    @media (max-width: 768px) {
+        .no-scrollbar-mobile::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar-mobile {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    }
+    </style>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { zinc: { 950: "#0a0a0a" } },
+                    animation: { 'fade-in': 'fadeIn 1s ease-out forwards' }
+                },
+            },
+        };
+    </script>
+</head>
+
+<body class="bg-zinc-50 text-zinc-900 antialiased overflow-x-hidden">
+
+    <nav class="fixed top-0 w-full z-50 flex justify-between items-center px-6 py-4 glass border-b border-zinc-100">
+        <span class="serif italic font-bold text-lg tracking-tighter">Loigon.</span>
+        <button onclick="toggleAdminPanel()" class="text-[10px] tracking-[0.3em] uppercase border border-zinc-300 px-4 py-2 rounded-full hover:bg-zinc-900 hover:text-white transition-all">
+            Panel Admin
+        </button>
+    </nav>
+
+    <header class="relative min-h-screen flex items-center justify-center px-6 pt-20">
+        <div class="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div class="lg:col-span-5 z-10">
+                <span class="text-[10px] tracking-[0.5em] uppercase text-zinc-400 font-semibold mb-4 block">Est. 2026 — Visual Storyteller</span>
+                <h1 class="text-6xl md:text-8xl font-bold text-zinc-950 mb-6 serif leading-[0.9] tracking-tighter">
+                    El Rincón <br> <span class="italic font-light text-zinc-400">de</span> Loigon
+                </h1>
+                <p class="text-lg text-zinc-500 font-light italic border-l-2 border-zinc-200 pl-6 max-w-sm">
+                    "No tomo fotografías para mostrar lo que veo, sino para conservar cómo me sentí."
+                </p>
+            </div>
+            <div class="lg:col-span-7 relative h-[60vh] lg:h-[80vh] w-full overflow-hidden rounded-3xl shadow-2xl">
+                <img src="images/P1090390.JPG" alt="Main" class="w-full h-full object-cover img-zoom">
+                <div class="absolute bottom-8 left-8 text-white z-20">
+                    <p class="text-[10px] uppercase tracking-widest opacity-70">Ubicación actual</p>
+                    <p class="serif italic text-xl">Ibagué, Colombia</p>
+                </div>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-24">
+        <div class="flex gap-8 mb-16 overflow-x-auto no-scrollbar pb-4 text-sm uppercase tracking-widest font-medium text-zinc-400">
+            <button class="text-zinc-950 border-b-2 border-zinc-950 pb-1">Todas</button>
+            <button class="hover:text-zinc-950 transition">Retratos</button>
+            <button class="hover:text-zinc-950 transition">Paisajes</button>
+            <button class="hover:text-zinc-950 transition">Momentos</button>
+        </div>
+
+        <div id="gallery-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
+            </div>
+
+        <section class="mt-32">
+            <div class="bg-zinc-950 rounded-[2rem] overflow-hidden grid grid-cols-1 lg:grid-cols-2 items-center">
+                <div class="aspect-video lg:aspect-square relative group cursor-pointer" onclick="openVideoModal()">
+    <video autoplay muted loop playsinline id="main-video-preview" class="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity">
+        <source src="images/elnene.mp4" type="video/mp4">
+    </video>
+    <div class="absolute inset-0 flex items-center justify-center">
+        <div class="w-20 h-20 flex items-center justify-center rounded-full bg-white/10 backdrop-blur-sm border border-white/20 group-hover:scale-110 transition-transform">
+            <svg class="w-8 h-8 text-white fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+    </div>
+</div>
+                
+                <div class="p-12 md:p-20 text-white">
+                    <span class="text-xs tracking-[0.4em] text-zinc-500 uppercase">Archivo Histórico</span>
+                    <h2 class="text-4xl md:text-5xl font-bold mt-4 mb-8 serif italic">"El pequeño Loigon"</h2>
+                    <p class="text-zinc-400 font-light leading-relaxed mb-10 serif text-lg">
+                        Un fragmento de memoria capturado por mi padre en 2009. La tecnología cambia, pero la esencia permanece.
+                    </p>
+                    <div class="flex items-center gap-4 text-zinc-500 italic text-sm border-t border-zinc-800 pt-8">
+                        <span>Samsung Digimax S500</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <hr class="my-32 border-zinc-200">
+
+        <section class="mb-32">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
+        <div>
+            <span class="text-[10px] tracking-[0.4em] text-zinc-400 uppercase font-bold">Explora por temas</span>
+            <h2 class="text-5xl font-bold serif italic mt-2">Colecciones</h2>
+        </div>
+        <div class="flex items-center gap-4">
+            <p class="text-zinc-400 text-xs serif italic">Desliza para explorar →</p>
+        </div>
+    </div>
+
+    <div class="flex gap-8 overflow-x-auto pb-10 no-scrollbar snap-x snap-mandatory" id="collections-scroll">
+        
+        <div class="min-w-[85vw] md:min-w-[500px] snap-center group cursor-pointer" 
+             onclick="openModalFromSrc('images/Paisaje.JPG', 'Susurros del Bosque', 'Una serie sobre la calma de la naturaleza.')">
+            <div class="aspect-[4/5] md:aspect-[16/10] overflow-hidden rounded-2xl mb-6 relative">
+                <img src="images/Paisaje.JPG" 
+                     class="w-full h-full object-cover img-zoom transition-transform duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80 group-hover:opacity-100 transition-opacity"></div>
+                <div class="absolute bottom-8 left-8 text-white">
+                    <span class="text-[10px] tracking-widest uppercase mb-2 block opacity-70">Series 01</span>
+                    <h4 class="text-3xl serif italic leading-none">Susurros del Bosque</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="min-w-[85vw] md:min-w-[500px] snap-center group cursor-pointer" 
+             onclick="openModalFromSrc('images/P1090468.JPG', 'Geometría Urbana', 'Perspectivas de la ciudad y su estructura.')">
+            <div class="aspect-[4/5] md:aspect-[16/10] overflow-hidden rounded-2xl mb-6 relative">
+                <img src="images/P1090468.JPG" 
+                     class="w-full h-full object-cover img-zoom">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80 group-hover:opacity-100 transition-opacity"></div>
+                <div class="absolute bottom-8 left-8 text-white">
+                    <span class="text-[10px] tracking-widest uppercase mb-2 block opacity-70">Series 02</span>
+                    <h4 class="text-3xl serif italic leading-none">Geometría Urbana</h4>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="min-w-[85vw] md:min-w-[500px] snap-center group cursor-pointer" 
+             onclick="openModalFromSrc('https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1200', 'Alturas Eternas', 'La inmensidad de los picos nevados.')">
+            <div class="aspect-[4/5] md:aspect-[16/10] overflow-hidden rounded-2xl mb-6 relative">
+                <img src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=800" 
+                     class="w-full h-full object-cover img-zoom">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80 group-hover:opacity-100 transition-opacity"></div>
+                <div class="absolute bottom-8 left-8 text-white">
+                    <span class="text-[10px] tracking-widest uppercase mb-2 block opacity-70">Series 04</span>
+                    <h4 class="text-3xl serif italic leading-none">Alturas Eternas</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+        </section>
+
+        <section class="mb-32">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold serif">Momentos Efímeros</h2>
+                <div class="w-12 h-px bg-zinc-300 mx-auto mt-6"></div>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-[200px] md:auto-rows-[300px]">
+                <div class="col-span-2 row-span-2 overflow-hidden rounded-2xl group relative cursor-zoom-in" onclick="openModalFromSrc('https://images.unsplash.com/photo-1493246507139-91e8bef99c02?auto=format&fit=crop&w=800', 'Altas Montañas')">
+                    <img src="https://images.unsplash.com/photo-1493246507139-91e8bef99c02?auto=format&fit=crop&w=800" class="w-full h-full object-cover img-zoom">
+                    <div class="absolute inset-0 bg-zinc-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <span class="text-white text-xs tracking-widest uppercase">Ver Momento</span>
+                    </div>
+                </div>
+                <div class="col-span-1 row-span-1 overflow-hidden rounded-2xl group relative cursor-zoom-in" onclick="openModalFromSrc('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800', 'Neblina')">
+                    <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800" class="w-full h-full object-cover img-zoom">
+                </div>
+                <div class="col-span-1 row-span-2 overflow-hidden rounded-2xl group relative cursor-zoom-in" onclick="openModalFromSrc('https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800', 'Lago Espejo')">
+                    <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800" class="w-full h-full object-cover img-zoom">
+                </div>
+                <div class="col-span-1 row-span-1 overflow-hidden rounded-2xl group relative cursor-zoom-in" onclick="openModalFromSrc('https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=800', 'Vida Silvestre')">
+                    <img src="https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=800" class="w-full h-full object-cover img-zoom">
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="py-20 border-t border-zinc-100 bg-white">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
+            <p class="text-zinc-400 text-sm font-light">© 2026 El Rincón de Loigon. Congelando el tiempo.</p>
+            <div class="flex gap-6 text-sm uppercase tracking-tighter font-semibold">
+                <a href="#" class="hover:underline">Instagram</a>
+                <a href="#" class="hover:underline">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <div id="photo-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 md:p-10 bg-zinc-950/90 backdrop-blur-xl opacity-0 transition-opacity duration-300">
+        <div class="bg-white w-full max-w-6xl h-full max-h-[90vh] rounded-3xl overflow-hidden flex flex-col lg:flex-row relative">
+            <button onclick="closeModal()" class="absolute top-6 right-6 z-50 bg-black/5 p-2 rounded-full hover:bg-black/10 transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+            <div class="lg:w-2/3 bg-zinc-100 flex items-center justify-center p-4">
+                <img id="modal-img" src="" class="max-w-full max-h-full object-contain shadow-2xl rounded-lg">
+            </div>
+            <div class="lg:w-1/3 p-8 md:p-12 flex flex-col h-full overflow-y-auto no-scrollbar">
+                <p id="modal-date" class="text-[10px] tracking-widest text-zinc-400 uppercase mb-4"></p>
+                <h3 id="modal-title" class="text-4xl font-bold serif mb-6"></h3>
+                <p id="modal-description" class="text-zinc-600 font-light leading-relaxed mb-8"></p>
+                
+                <div class="mt-auto">
+                    <h4 class="serif text-xl mb-4">Notas</h4>
+                    <div id="comments-section" class="space-y-4 mb-6"></div>
+                    <div class="relative">
+                        <input type="text" id="comment-input" class="w-full border-b border-zinc-200 py-3 text-sm focus:border-zinc-950 outline-none transition" placeholder="Escribe un pensamiento...">
+                        <button onclick="addComment()" class="absolute right-0 top-3 text-zinc-400 hover:text-black">Enviar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="admin-panel" class="fixed inset-y-0 right-0 w-full max-w-md bg-white z-[110] shadow-2xl translate-x-full transition-transform duration-500 p-8 overflow-y-auto">
+        <div class="flex justify-between items-center mb-10">
+            <h2 class="text-2xl font-bold serif">Panel de Control</h2>
+            <button onclick="toggleAdminPanel()" class="text-zinc-400">Cerrar</button>
+        </div>
+        
+        <form id="add-photo-form" class="space-y-6">
+            <div>
+                <label class="block text-xs uppercase tracking-widest text-zinc-500 mb-2">Título de la Obra</label>
+                <input type="text" id="admin-title" required class="w-full border border-zinc-200 p-3 rounded-lg focus:ring-1 ring-zinc-950 outline-none transition">
+            </div>
+            <div>
+                <label class="block text-xs uppercase tracking-widest text-zinc-500 mb-2">URL de Imagen (Simulado)</label>
+                <input type="text" id="admin-url" required placeholder="images/foto.jpg" class="w-full border border-zinc-200 p-3 rounded-lg outline-none">
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs uppercase tracking-widest text-zinc-500 mb-2">Ubicación</label>
+                    <input type="text" id="admin-loc" required class="w-full border border-zinc-200 p-3 rounded-lg outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs uppercase tracking-widest text-zinc-500 mb-2">Cámara</label>
+                    <input type="text" id="admin-cam" required class="w-full border border-zinc-200 p-3 rounded-lg outline-none">
+                </div>
+            </div>
+            <div>
+                <label class="block text-xs uppercase tracking-widest text-zinc-500 mb-2">Historia tras la foto</label>
+                <textarea id="admin-desc" rows="4" class="w-full border border-zinc-200 p-3 rounded-lg outline-none"></textarea>
+            </div>
+            <button type="submit" class="w-full bg-zinc-950 text-white py-4 rounded-xl font-bold hover:bg-zinc-800 transition shadow-lg">Publicar en Galería</button>
+        </form>
+
+        <div class="mt-12 pt-8 border-t border-zinc-100 text-center">
+            <p class="text-xs text-zinc-400">Identificado como Loigon (Admin)</p>
+        </div>
+    </div>
+
+    <script>
+        let gallery = [
+            { 
+                id: 1, 
+                title: "Miradas Cruzadas", 
+                date: "Enero 18, 2026", 
+                location: "Mi casita", 
+                camera: "Panasonic DMC", 
+                description: "Cuando dos almas se miran, el mundo se detiene ante el asombro de un sentimiento que escapa a las palabras, pero que se desborda en la piel: el amor en su máxima expresión.", 
+                url: "images/P1090283 (1).JPG", 
+                comments: ["Se ven hermosos."]
+            },
+            { 
+                id: 2, 
+                title: "Cielito Rosao´", 
+                date: "Agosto 2023", 
+                location: "Cañaveral",
+                camera: "Panasonic DMC", 
+                description: "Espectáculo de colores tras una tarde de reflexión.", 
+                url: "images/P1090402.JPG", 
+                comments: []
+             },
+            { 
+                id: 3, 
+                title: "¿Una play blanca?", 
+                date: "Enero 2026", 
+                location: "Calambeo", 
+                camera: "Honor x8c", 
+                description: "Tesoros inesperados en repisas de amigos.",
+                url: "images/P1090375.JPG", 
+                comments: [] 
+            },
+            { 
+                id: 4, 
+                title: "Chocolate con perlas", 
+                date: "Diciembre 2025", 
+                location: "Garaje", 
+                camera: "Honor x8c", 
+                description: "Kira lista para conquistar el barrio.", 
+                url: "images/kira.jpg", comments: [] 
+            }
+        ];
+
+        let currentPhotoId = null;
+
+        function renderGallery() {
+            const grid = document.getElementById("gallery-grid");
+            grid.innerHTML = "";
+            gallery.forEach((piece) => {
+                grid.innerHTML += `
+                    <article class="group cursor-pointer animate-fade-in" onclick="openModal(${piece.id})">
+                        <div class="aspect-[3/4] overflow-hidden rounded-3xl bg-zinc-200 mb-6 relative shadow-sm transition-shadow hover:shadow-2xl">
+                            <img src="${piece.url}" class="w-full h-full object-cover img-zoom grayscale-[30%] group-hover:grayscale-0">
+                            <div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors"></div>
+                        </div>
+                        <div>
+                            <p class="text-[9px] tracking-widest uppercase text-zinc-400 mb-1">${piece.location}</p>
+                            <h3 class="text-2xl font-bold serif text-zinc-900 group-hover:italic transition-all">${piece.title}</h3>
+                        </div>
+                    </article>`;
+            });
+        }
+
+        // --- Funciones de UI ---
+        function toggleAdminPanel() {
+            const panel = document.getElementById('admin-panel');
+            panel.classList.toggle('translate-x-full');
+        }
+
+        function openModal(id) {
+            const piece = gallery.find(p => p.id === id);
+            currentPhotoId = id;
+            document.getElementById("modal-img").src = piece.url;
+            document.getElementById("modal-title").innerText = piece.title;
+            document.getElementById("modal-date").innerText = piece.date;
+            document.getElementById("modal-description").innerText = piece.description;
+            renderComments();
+            
+            const modal = document.getElementById("photo-modal");
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+            setTimeout(() => modal.classList.remove("opacity-0"), 10);
+            document.body.style.overflow = "hidden";
+        }
+
+        function closeModal() {
+            const modal = document.getElementById("photo-modal");
+            modal.classList.add("opacity-0");
+            setTimeout(() => {
+                modal.classList.add("hidden");
+                document.body.style.overflow = "auto";
+            }, 300);
+        }
+
+        function renderComments() {
+            const piece = gallery.find(p => p.id === currentPhotoId);
+            const container = document.getElementById("comments-section");
+            container.innerHTML = piece.comments.length ? 
+                piece.comments.map(c => `<p class="text-sm text-zinc-500 italic border-l border-zinc-200 pl-4 py-1">"${c}"</p>`).join("") :
+                `<p class="text-zinc-300 text-xs italic">Aún no hay notas.</p>`;
+        }
+
+        function addComment() {
+            const input = document.getElementById('comment-input');
+            if(!input.value) return;
+            const piece = gallery.find(p => p.id === currentPhotoId);
+            piece.comments.push(input.value);
+            input.value = "";
+            renderComments();
+        }
+
+        // --- Lógica Admin ---
+        document.getElementById('add-photo-form').onsubmit = (e) => {
+            e.preventDefault();
+            const newPhoto = {
+                id: Date.now(),
+                title: document.getElementById('admin-title').value,
+                url: document.getElementById('admin-url').value,
+                location: document.getElementById('admin-loc').value,
+                camera: document.getElementById('admin-cam').value,
+                description: document.getElementById('admin-desc').value,
+                date: new Date().toLocaleDateString('es-ES', { month: 'long', day: 'numeric', year: 'numeric'}),
+                comments: []
+            };
+            gallery.unshift(newPhoto); // Agregar al inicio
+            renderGallery();
+            toggleAdminPanel();
+            e.target.reset();
+            alert("¡Nueva fotografía publicada!");
+        };
+
+        function openModalFromSrc(src, title, description = "") {
+        currentPhotoId = null; 
+        document.getElementById("modal-img").src = src;
+        document.getElementById("modal-title").innerText = title;
+        document.getElementById("modal-date").innerText = "Colección Especial";
+        document.getElementById("modal-description").innerText = description || "Una pieza seleccionada de las colecciones visuales de Loigon.";
+        
+        // Limpiar comentarios para fotos de colecciones
+        document.getElementById("comments-section").innerHTML = `
+            <div class="bg-zinc-50 p-4 rounded-lg">
+                <p class="text-zinc-400 text-xs italic">Las notas están desactivadas para esta colección de archivo.</p>
+            </div>`;
+        
+        const modal = document.getElementById("photo-modal");
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+        setTimeout(() => modal.classList.remove("opacity-0"), 10);
+        document.body.style.overflow = "hidden";
+    }
+
+    // Opcional: Permitir scroll horizontal con la rueda del ratón
+    const scrollContainer = document.getElementById('collections-scroll');
+    scrollContainer.addEventListener('wheel', (evt) => {
+        evt.preventDefault();
+        scrollContainer.scrollLeft += evt.deltaY;
+    });
+// --- Funciones del Archivo Histórico ---
+
+function openVideoModal() {
+    const modal = document.getElementById('video-modal');
+    const videoPlayer = document.getElementById('modal-video-player');
+    
+    // Mostramos el modal
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    
+    // Animación de entrada y Play
+    setTimeout(() => {
+        modal.classList.remove('opacity-0');
+        videoPlayer.play().catch(error => {
+            console.log("Auto-play prevenido por el navegador, esperando interacción.");
+        });
+    }, 10);
+    
+    // Bloquear el scroll de la página de fondo
+    document.body.style.overflow = "hidden";
+}
+
+function closeVideoModal() {
+    const modal = document.getElementById('video-modal');
+    const videoPlayer = document.getElementById('modal-video-player');
+    
+    // Animación de salida
+    modal.classList.add('opacity-0');
+    
+    // Pausar video inmediatamente
+    videoPlayer.pause();
+    
+    // Ocultar completamente tras la animación
+    setTimeout(() => {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        document.body.style.overflow = "auto"; // Restaurar scroll
+    }, 500);
+}
+        // Inicializar
+        renderGallery();
+    </script>
+
+    <div id="video-modal" class="fixed inset-0 z-[150] hidden items-center justify-center p-4 md:p-10 bg-zinc-950/98 backdrop-blur-2xl opacity-0 transition-opacity duration-500">
+    <button onclick="closeVideoModal()" class="absolute top-6 right-6 z-[160] bg-black/10 hover:bg-black/20 text-white p-3 rounded-full transition-all">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+    
+    <div class="w-full max-w-5xl aspect-video rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] bg-black">
+        <video id="modal-video-player" controls class="w-full h-full object-contain">
+            <source src="images/elnene.mp4" type="video/mp4">
+            Tu navegador no soporta videos.
+        </video>
+    </div>
+</div>
+</body>
+</html>
